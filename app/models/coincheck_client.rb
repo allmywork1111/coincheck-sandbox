@@ -8,14 +8,15 @@ class CoincheckClient
   end
 
   def rate(pair)
-    get(
-      path: "rate/#{pair}",
+    path = "rate/#{pair}"
+    request_for_get(
+      path: path,
     )
   end
 
   def account_balance
     path = "accounts/balance"
-    get(
+    request_for_get(
       path: path,
       headers: get_auth_headers(path)
     )
@@ -23,11 +24,8 @@ class CoincheckClient
 
   private
 
-  def get(path:, headers: nil)
-    response = @conn.get(
-      path,
-      headers,
-    )
+  def request_for_get(path:, params: nil, headers: nil)
+    response = @conn.get(path, params, headers)
     extra_response_body(
       response: response,
     )
@@ -36,8 +34,8 @@ class CoincheckClient
   def get_auth_headers(path)
     key = ENV["COINCHECK_API_KEY"]
     secret = ENV["COINCHECK_API_SECRET"]
-    binding.b
-    nonce = Time.now.to_i.to_s
+
+    nonce = Time.current.to_i.to_s
     message = nonce + "#{BASE_URL}/#{path}"
 
     signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha256"), secret, message)
