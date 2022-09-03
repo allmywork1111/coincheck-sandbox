@@ -1,24 +1,13 @@
-# README
+# 起動
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+```
+# 初回
+docker-compose build
+touch .env
+# .envに環境変数セット
+COINCHECK_API_KEY=
+COINCHECK_API_SECRET=
 
-Things you may want to cover:
+docker-compose up
+```
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
