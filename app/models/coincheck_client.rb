@@ -7,6 +7,22 @@ class CoincheckClient
     )
   end
 
+  def trades(pair:, pagination: nil)
+    path = "trades"
+    params = {
+      pair: pair,
+    }
+
+    if pagination.present?
+      params.merge!(pagination)
+    end
+
+    request_for_get(
+      path: path,
+      params: params,
+    )
+  end
+
   def rate(pair)
     path = "rate/#{pair}"
     request_for_get(
