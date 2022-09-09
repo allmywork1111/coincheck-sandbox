@@ -38,6 +38,21 @@ class CoincheckClient
     )
   end
 
+  def exchange_order(pair:, order_type:, rate:, amount:)
+    path = "exchange/orders"
+    params = {
+      pair: pair,
+      order_type: order_type,
+      rate: rate,
+      amount: amount,
+    }
+    request_for_post(
+      path: path,
+      params: params,
+      headers: get_auth_headers(path, params)
+    )
+  end
+
   private
 
   def request_for_get(path:, params: nil, headers: nil)
@@ -47,12 +62,19 @@ class CoincheckClient
     )
   end
 
-  def get_auth_headers(path)
+  def request_for_post(path:, params:, headers:)
+    response = @conn.post(path, params, headers)
+    extra_response_body(
+      response: response,
+    )
+  end
+
+  def get_auth_headers(path, params = nil)
     key = ENV["COINCHECK_API_KEY"]
     secret = ENV["COINCHECK_API_SECRET"]
 
     nonce = Time.current.to_i.to_s
-    message = nonce + "#{BASE_URL}/#{path}"
+    message = nonce + "#{BASE_URL}/#{path}" + params.to_param
 
     signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new("sha256"), secret, message)
     {
