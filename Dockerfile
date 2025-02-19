@@ -1,4 +1,4 @@
-FROM ruby:3.1.1
+FROM ruby:3.4.2
 RUN mkdir /myapp
 WORKDIR /myapp
 ADD Gemfile /myapp/Gemfile
